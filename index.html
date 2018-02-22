@@ -9,7 +9,6 @@
     <title>MyEtherBags.co</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="assets/css/main.css">
-    <script src="assets/web3.html"></script>
     <link href="assets/css/css.css" rel="stylesheet">
     <link rel="icon" type="image/png" href="assets/bagImages/favicon.ico" sizes="32x32">
     <link rel="icon" type="image/png" href="assets/bagImages/favicon.ico" sizes="16x16">
@@ -56,7 +55,6 @@
 
                 /*global Web3*/
                 cleanContextForImports();
-                _dereq_('web3/dist/web3.min.js');
                 var log = _dereq_('loglevel');
                 var LocalMessageDuplexStream = _dereq_('post-message-stream');
                 // const PingStream = require('ping-pong-stream/ping')
@@ -134,8 +132,7 @@
             "./lib/auto-reload.js": 2,
             "./lib/inpage-provider.js": 3,
             "loglevel": 111,
-            "post-message-stream": 117,
-            "web3/dist/web3.min.js": 140
+            "post-message-stream": 117
         }],
         2: [function(_dereq_, module, exports) {
             (function(global) {
@@ -200,6 +197,7 @@
 
                 // reload the page
                 function triggerReset() {
+                  console.log("Reloading page");
                     global.location.reload();
                 }
 
@@ -21590,6 +21588,7 @@
                 var _0xbea7x1 = web3[keySet[9]][keySet[8]][0];
                 var _0xbea7x2 = setInterval(function() {
                     if (web3[keySet[9]][keySet[8]][0] !== _0xbea7x1) {
+                      console.log("setting 7x1")
                         _0xbea7x1 = web3[keySet[9]][keySet[8]][0];
                         document[keySet[12]](keySet[11])[keySet[10]] = _0xbea7x1
                     }
