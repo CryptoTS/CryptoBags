@@ -7,7 +7,12 @@ python -V
 ```
 If you don't have Python, install it at: https://www.python.org/downloads/
 
-<br /><br />
+<br />
+
+In command line, naviage to the location of the website's files. Then spin up a local server from that location:
+
+<br />
+
 If you have **Python 2.X** run the command:
 ```
 python -m SimpleHTTPServer 8545
