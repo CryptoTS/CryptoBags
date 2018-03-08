@@ -82,7 +82,6 @@ contract CryptoBags is ERC721 {
 
   /*** DATATYPES ***/
   struct Bag {
-    uint256 id;
     string name;
     uint256 price;
     uint256 rent;
@@ -112,9 +111,9 @@ contract CryptoBags is ERC721 {
     // Caller must own token.
     require(_owns(msg.sender, _tokenId));
 
-    BagIndexToApproved[_tokenId] = _to;
+    bagIndexToApproved[_tokenId] = _to;
 
-    Approval(msg.sender, _to, _tokenId);
+    emit Approval(msg.sender, _to, _tokenId);
   }
 
   /// For querying balance of a particular account
@@ -125,7 +124,7 @@ contract CryptoBags is ERC721 {
   }
 
   /// @dev Creates a new Bag with the given name.
-  function createContractBag(string _name) public onlyCLevel {
+  function createContractBag(string _name) public onlyCEO {
     _createBag(_name, address(this), STARTING_PRICE);
   }
 
@@ -156,7 +155,7 @@ contract CryptoBags is ERC721 {
     require(owner != address(0));
   }
 
-  function payout(address _to) public onlyCLevel {
+  function payout(address _to) public onlyCEO {
     _payout(_to);
   }
 
@@ -195,7 +194,7 @@ contract CryptoBags is ERC721 {
       oldOwner.transfer(payment);
     }
 
-    TokenSold(_tokenId, sellingPrice, BagIndexToPrice[_tokenId], oldOwner, newOwner, Bags[_tokenId].name);
+    emit TokenSold(_tokenId, sellingPrice, bags[_tokenId].price, oldOwner, newOwner, bags[_tokenId].name);
 
     msg.sender.transfer(purchaseExcess);
   }
@@ -296,14 +295,14 @@ contract CryptoBags is ERC721 {
 
   /// For checking approval of transfer for address _to
   function _approved(address _to, uint256 _tokenId) private view returns (bool) {
-    return BagIndexToApproved[_tokenId] == _to;
+    return bagIndexToApproved[_tokenId] == _to;
   }
 
   /// For creating Bags
   function _createBag(string _name, address _owner, uint256 _price) private {
     Bag memory _bag = Bag({
-      name: _name
-      price: _price
+      name: _name,
+      price: _price,
       rent: INITIAL_RENT
     });
     uint256 newBagId = bags.push(_bag) - 1;
@@ -312,9 +311,9 @@ contract CryptoBags is ERC721 {
     // let's just be 100% sure we never let this happen.
     require(newBagId == uint256(uint32(newBagId)));
 
-    Birth(newBagId, _name, _owner);
+    emit Birth(newBagId, _name, _owner);
 
-    BagIndexToPrice[newBagId] = _price;
+    bags[newBagId].price = _price;
 
     // This will assign ownership, and also emit the Transfer event as
     // per ERC721 draft
@@ -346,11 +345,11 @@ contract CryptoBags is ERC721 {
     if (_from != address(0)) {
       ownershipTokenCount[_from]--;
       // clear any previously approved ownership exchange
-      delete BagIndexToApproved[_tokenId];
+      delete bagIndexToApproved[_tokenId];
     }
 
     // Emit the transfer event.
-    Transfer(_from, _to, _tokenId);
+    emit Transfer(_from, _to, _tokenId);
   }
 }
 library SafeMath {
